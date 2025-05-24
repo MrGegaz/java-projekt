@@ -6,6 +6,7 @@ public abstract class Igra {
     private String zanrIgre;
     private String datumIzlaska;
     private boolean kupljena;
+    private boolean digitalnaIgra; // Je li igra digitalna ili fizička
     private boolean instalirana;
     // TODO:
     // brSatiIgranja;
@@ -13,12 +14,13 @@ public abstract class Igra {
 
     /* ------------------------------ KONSTRUKTORI ------------------------------ */
 
-    public Igra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena, boolean instalirana) {
+    public Igra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena, boolean digitalnaIgra, boolean instalirana) {
         this.naslovIgre = naslovIgre;
         this.platforma = platforma;
         this.zanrIgre = zanrIgre;
         this.datumIzlaska = datumIzlaska;
         this.kupljena = kupljena;
+        this.digitalnaIgra = digitalnaIgra;
         this.instalirana = instalirana;
     }
 
