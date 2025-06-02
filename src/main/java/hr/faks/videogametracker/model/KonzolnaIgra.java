@@ -25,7 +25,14 @@ public class KonzolnaIgra extends Igra implements Igrivo {
 
     /* ------------------------------ METODE ------------------------------ */
 
-    // TODO: Dodati override metode za toString() i ostale potrebne metode
+    // TODO: Dodati ostale potrebne metode
+
+    public String toString() {
+        return "Konzolna Igra {\n" +
+                super.toString() +
+                "Platforma konzole: " + platformaKonzole + '\n' +
+                "}" + '\n';
+    }
 
     @Override
     public void pokreniIgru() {

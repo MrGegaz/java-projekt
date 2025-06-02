@@ -80,12 +80,10 @@ public abstract class Igra {
 
     @Override
     public String toString() {
-        return "Igra{" +
-                "naslovIgre='" + naslovIgre + '\'' +
-                ", platforma='" + platforma + '\'' +
-                ", zanrIgre='" + zanrIgre + '\'' +
-                ", datumIzlaska='" + datumIzlaska + '\'' +
-                '}';
+        return "Naslov igre: " + naslovIgre + '\n' +
+                "Platforma: " + platforma + '\n' +
+                "Žanr igre: " + zanrIgre + '\n' +
+                "Datum izlaska: " + datumIzlaska + '\n';
     }
 
     // TODO: Dodati još neke metode ako je potrebno

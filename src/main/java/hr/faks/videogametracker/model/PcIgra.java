@@ -35,7 +35,15 @@ public class PcIgra extends Igra implements Igrivo {
 
     /* ------------------------------ METODE ------------------------------ */
 
-    // TODO: Dodati override metode za toString() i ostale potrebne metode
+    // TODO: Dodati ostale potrebne metode
+
+    public String toString() {
+        return "PC Igra {\n" +
+                super.toString() +
+                "Zahtjevi: " + zahtjevi + '\n' +
+                "DRM: " + imaDRM + '\n' +
+                "}" + '\n';
+    }
 
     @Override
     public void pokreniIgru() {
