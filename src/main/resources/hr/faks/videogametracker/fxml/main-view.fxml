@@ -11,8 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.faks.videogametracker.fxml.MainView">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.faks.videogametracker.gui.MainController">
    <children>
       <GridPane alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
@@ -32,12 +31,12 @@
                   <Font size="32.0" />
                </font>
             </Text>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+            <TableView fx:id="tableViewIgre" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER">
               <columns>
-                <TableColumn maxWidth="300.0" minWidth="260.0" prefWidth="300.0" text="Naziv" />
-                <TableColumn maxWidth="200.0" minWidth="160.0" prefWidth="200.0" resizable="false" text="Platforma" />
-                  <TableColumn maxWidth="200.0" minWidth="150.0" prefWidth="200.0" resizable="false" text="Žanr" />
-                  <TableColumn maxWidth="200.0" minWidth="120.0" prefWidth="200.0" resizable="false" text="Datum izlaska" />
+                <TableColumn fx:id="colNaziv" maxWidth="300.0" minWidth="260.0" prefWidth="300.0" text="Naziv" />
+                <TableColumn fx:id="colPlatforma" maxWidth="200.0" minWidth="160.0" prefWidth="200.0" resizable="false" text="Platforma" />
+                  <TableColumn fx:id="colZanr" maxWidth="200.0" minWidth="150.0" prefWidth="200.0" resizable="false" text="Žanr" />
+                  <TableColumn fx:id="colDatumIzlaska" maxWidth="200.0" minWidth="120.0" prefWidth="200.0" resizable="false" text="Datum izlaska" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="10.0" top="10.0" />
@@ -95,17 +94,17 @@
                <children>
                   <Button fx:id="btnKontrolnaPloca" mnemonicParsing="false" text="Kontrolna ploča" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets top="10.0" />
+                        <Insets />
                      </GridPane.margin>
                   </Button>
                   <Button fx:id="btnPostavke" mnemonicParsing="false" text="Postavke" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets top="60.0" />
+                        <Insets top="50.0" />
                      </GridPane.margin>
                   </Button>
                   <Button fx:id="btnLogovi" mnemonicParsing="false" text="Logovi" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets top="110.0" />
+                        <Insets top="100.0" />
                      </GridPane.margin>
                   </Button>
                </children>
