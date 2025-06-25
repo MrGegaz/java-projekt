@@ -5,21 +5,16 @@ public abstract class Igra {
     private String platforma;
     private String zanrIgre;
     private String datumIzlaska;
-    private boolean kupljena;
     private boolean digitalnaIgra; // Je li igra digitalna ili fizička
     private boolean instalirana;
-    // TODO:
-    // brSatiIgranja;
-    // ocjenaIgre;
 
     /* ------------------------------ KONSTRUKTORI ------------------------------ */
 
-    public Igra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena, boolean digitalnaIgra, boolean instalirana) {
+    public Igra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean digitalnaIgra, boolean instalirana) {
         this.naslovIgre = naslovIgre;
         this.platforma = platforma;
         this.zanrIgre = zanrIgre;
         this.datumIzlaska = datumIzlaska;
-        this.kupljena = kupljena;
         this.digitalnaIgra = digitalnaIgra;
         this.instalirana = instalirana;
     }
@@ -40,10 +35,6 @@ public abstract class Igra {
 
     public void setDatumIzlaska(String datumIzlaska) {
         this.datumIzlaska = datumIzlaska;
-    }
-
-    public void setKupljena(boolean kupljena) {
-        this.kupljena = kupljena;
     }
 
     public void setInstalirana(boolean instalirana) {
@@ -68,10 +59,6 @@ public abstract class Igra {
         return datumIzlaska;
     }
 
-    public boolean isKupljena() {
-        return kupljena;
-    }
-
     public boolean isDigitalnaIgra() { return digitalnaIgra; }
 
     public boolean isInstalirana() {
@@ -85,7 +72,9 @@ public abstract class Igra {
         return "Naslov igre: " + naslovIgre + '\n' +
                 "Platforma: " + platforma + '\n' +
                 "Žanr igre: " + zanrIgre + '\n' +
-                "Datum izlaska: " + datumIzlaska + '\n';
+                "Datum izlaska: " + datumIzlaska + '\n' +
+                "Digitalna kopija: " + digitalnaIgra + '\n' +
+                "Instalirana: " + instalirana + '\n';
     }
 
     // TODO: Dodati još neke metode ako je potrebno

@@ -5,9 +5,9 @@ public class KonzolnaIgra extends Igra implements Igrivo {
 
     /* ------------------------------ KONSTRUKTORI ------------------------------ */
 
-    public KonzolnaIgra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena,
+    public KonzolnaIgra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska,
                         boolean digitalnaIgra, boolean instalirana, String platformaKonzole) {
-        super(naslovIgre, platforma, zanrIgre, datumIzlaska, kupljena, digitalnaIgra, instalirana);
+        super(naslovIgre, platforma, zanrIgre, datumIzlaska, digitalnaIgra, instalirana);
         this.platformaKonzole = platformaKonzole;
     }
 
@@ -40,7 +40,7 @@ public class KonzolnaIgra extends Igra implements Igrivo {
     }
 
     @Override
-    public void jeIgriva() {
-        // TODO: Implementirati logiku provjere je li igra igriva na konzoli
+    public void zaustaviIgru() {
+        // TODO: Implementirati logiku zaustavljanja igre na konzoli
     }
 }

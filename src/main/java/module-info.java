@@ -8,7 +8,7 @@ module hr.faks.videogametracker {
 
     opens hr.faks.videogametracker.gui to javafx.fxml;
     opens hr.faks.videogametracker.app to javafx.graphics;
-    opens hr.faks.videogametracker.model to javafx.base;
+    opens hr.faks.videogametracker.model to javafx.base, com.google.gson;
 
     exports hr.faks.videogametracker.app;
     exports hr.faks.videogametracker.gui;

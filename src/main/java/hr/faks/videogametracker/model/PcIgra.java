@@ -8,7 +8,7 @@ public class PcIgra extends Igra implements Igrivo {
 
     public PcIgra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena,
                   boolean digitalnaIgra, boolean instalirana, String zahtjevi, boolean imaDRM) {
-        super(naslovIgre, platforma, zanrIgre, datumIzlaska, kupljena, digitalnaIgra, instalirana);
+        super(naslovIgre, platforma, zanrIgre, datumIzlaska, digitalnaIgra, instalirana);
         this.zahtjevi = zahtjevi;
         this.imaDRM = imaDRM;
     }
@@ -51,7 +51,7 @@ public class PcIgra extends Igra implements Igrivo {
     }
 
     @Override
-    public void jeIgriva() {
-        // TODO: Implementirati logiku provjere je li igra igriva na PC-u
+    public void zaustaviIgru() {
+        // TODO: Implementirati logiku zaustavljanja igre na PC-u
     }
 }

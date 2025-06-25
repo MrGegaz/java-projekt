@@ -5,5 +5,5 @@ public interface Igrivo {
 
     void pokreniIgru();
 
-    void jeIgriva();
+    void zaustaviIgru();
 }

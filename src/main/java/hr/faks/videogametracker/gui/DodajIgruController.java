@@ -53,26 +53,22 @@ public class DodajIgruController {
         btnOdustani.setOnAction(event -> zatvoriProzor());
     }
 
-    /**
-     * Postavlja kontroler u mod za uređivanje postojeće igre
-     * @param igra Igra koja se uređuje
-     */
+    // Postavlja kontroler u mod za uređivanje postojeće igre
     public void postaviIgruZaUredivanje(Igra igra) {
         if (igra != null) {
             this.igraZaUredivanje = igra;
             this.uredivanjeMod = true;
 
-            // Popuni polja s podacima igre
+            // Punjenje polja s podacima igre
             tfNaslov.setText(igra.getNaslovIgre());
             tfZanr.setText(igra.getZanrIgre());
             cbPlatforma.setValue(igra.getPlatforma());
 
-            // Postavi datum
+            // Postavljanje datuma
             try {
                 LocalDate datum = LocalDate.parse(igra.getDatumIzlaska(), DateTimeFormatter.ISO_DATE);
                 dpDatumIzlaska.setValue(datum);
             } catch (Exception e) {
-                // U slučaju nepravilnog formata datuma, koristi današnji datum
                 dpDatumIzlaska.setValue(LocalDate.now());
             }
         }
@@ -86,7 +82,7 @@ public class DodajIgruController {
 
         // Provjera jesu li sva polja popunjena
         if (!naslov.isEmpty() && platforma != null && !zanr.isEmpty() && datumIzlaska != null) {
-            // Formatiranje datuma u željeni format (npr. YYYY-MM-DD)
+            // Formatiranje datuma u format (npr. YYYY-MM-DD)
             String formatiranDatum = datumIzlaska.format(DateTimeFormatter.ISO_DATE);
 
             if (uredivanjeMod && igraZaUredivanje != null) {
@@ -107,7 +103,7 @@ public class DodajIgruController {
                 if (platforma.equalsIgnoreCase("PC")) {
                     novaIgra = new PcIgra(naslov, platforma, zanr, formatiranDatum, true, true, true, "Standardne specifikacije", false);
                 } else {
-                    novaIgra = new KonzolnaIgra(naslov, platforma, zanr, formatiranDatum, true, false, true, platforma);
+                    novaIgra = new KonzolnaIgra(naslov, platforma, zanr, formatiranDatum, true, false, platforma);
                 }
 
                 // Dodaj igru u listu u MainController-u
