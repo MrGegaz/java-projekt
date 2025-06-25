@@ -72,6 +72,8 @@ public abstract class Igra {
         return kupljena;
     }
 
+    public boolean isDigitalnaIgra() { return digitalnaIgra; }
+
     public boolean isInstalirana() {
         return instalirana;
     }
