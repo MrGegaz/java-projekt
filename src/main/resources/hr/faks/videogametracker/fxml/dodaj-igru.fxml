@@ -13,7 +13,7 @@
         <Label text="Dodaj novu igru" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
         <TextField fx:id="tfNaslov" promptText="Naslov igre"/>
-        <TextField fx:id="tfGodina" promptText="Godina izlaska"/>
+        <DatePicker fx:id="dpDatumIzlaska" promptText="Datum izlaska"/>
         <ComboBox fx:id="cbPlatforma" promptText="Odaberi platformu"/>
         <TextField fx:id="tfZanr" promptText="Žanr"/>
 
