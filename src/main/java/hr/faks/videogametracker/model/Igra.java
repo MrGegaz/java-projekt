@@ -1,6 +1,9 @@
 package hr.faks.videogametracker.model;
 
-public abstract class Igra {
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+public abstract class Igra implements Igrivo {
     private String naslovIgre;
     private String platforma;
     private String zanrIgre;
@@ -75,6 +78,20 @@ public abstract class Igra {
                 "Datum izlaska: " + datumIzlaska + '\n' +
                 "Digitalna kopija: " + digitalnaIgra + '\n' +
                 "Instalirana: " + instalirana + '\n';
+    }
+
+    @Override
+    public void pokreniIgru() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Igra " + naslovIgre + " je pokrenuta", ButtonType.OK);
+        alert.setTitle("Pokretanje igre");
+        alert.showAndWait();
+    }
+
+    @Override
+    public void zaustaviIgru() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Igra " + naslovIgre + " je zaustavljena", ButtonType.OK);
+        alert.setTitle("Zaustavljanje igre");
+        alert.showAndWait();
     }
 
     // TODO: Dodati još neke metode ako je potrebno

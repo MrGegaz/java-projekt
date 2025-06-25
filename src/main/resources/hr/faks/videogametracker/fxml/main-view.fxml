@@ -17,6 +17,7 @@
             <Separator orientation="VERTICAL"/>
             <Label text="Ukupno igara:" />
             <Label fx:id="lblUkupno" text="0" />
+            <Button fx:id="btnPokreni" text="Pokreni igru" visible="false" onAction="#pokreniIgru" />
         </ToolBar>
     </top>
 

@@ -36,6 +36,9 @@ public class MainController {
     private Button btnUredi;
 
     @FXML
+    private Button btnPokreni;
+
+    @FXML
     private TableColumn<Igra, String> colNaslov;
 
     @FXML
@@ -70,12 +73,23 @@ public class MainController {
         postaviEventHandlere();
 
         System.out.println("Broj igara: " + listaIgara.size());
+
+        btnPokreni.setVisible(false);
+
+        tableViewIgre.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null && newSelection.isInstalirana()) {
+                btnPokreni.setVisible(true);
+            } else {
+                btnPokreni.setVisible(false);
+            }
+        });
     }
 
     private void postaviEventHandlere() {
         btnDodaj.setOnAction(event -> otvoriDodajIgruProzor());
         btnUredi.setOnAction(event -> urediIgru());
         btnObrisi.setOnAction(event -> obrisiIgru());
+        btnPokreni.setOnAction(event -> pokreniIgru());
     }
 
     private void otvoriDodajIgruProzor() {
@@ -281,5 +295,38 @@ public class MainController {
         listaIgara.add(new PcIgra("The Witcher 3", "PC", "RPG", "2015-05-19", true, true, true, "specifikacija", false));
         listaIgara.add(new KonzolnaIgra("God of War", "Playstation", "Action", "2018-04-20", true, false, "PS4"));
         listaIgara.add(new KonzolnaIgra("Halo Infinite", "Xbox", "Shooter", "2021-12-08", true, false, "Xbox Series X"));
+    }
+
+    @FXML
+    private void pokreniIgru() {
+        Igra odabranaIgra = tableViewIgre.getSelectionModel().getSelectedItem();
+        if (odabranaIgra != null && odabranaIgra.isInstalirana()) {
+            // Pokretanje igre pozivom metode iz interface-a Igrivo
+            odabranaIgra.pokreniIgru();
+
+            // Kreiranje novog prozora za zaustavljanje igre
+            Stage gameControlStage = new Stage();
+            gameControlStage.setTitle("Igra pokrenuta");
+
+            Button stopButton = new Button("Zaustavi igru");
+            stopButton.setOnAction(e -> {
+                odabranaIgra.zaustaviIgru();
+                gameControlStage.close();
+            });
+
+            // Kreiranje layout-a za prozor
+            javafx.scene.layout.VBox layout = new javafx.scene.layout.VBox(10);
+            layout.setPadding(new javafx.geometry.Insets(20));
+            layout.setAlignment(javafx.geometry.Pos.CENTER);
+
+            Label gameRunningLabel = new Label("Igra " + odabranaIgra.getNaslovIgre() + " je pokrenuta!");
+            layout.getChildren().addAll(gameRunningLabel, stopButton);
+
+            Scene scene = new Scene(layout, 300, 150);
+            gameControlStage.setScene(scene);
+            gameControlStage.initModality(Modality.WINDOW_MODAL);
+            gameControlStage.initOwner(btnPokreni.getScene().getWindow());
+            gameControlStage.show();
+        }
     }
 }
