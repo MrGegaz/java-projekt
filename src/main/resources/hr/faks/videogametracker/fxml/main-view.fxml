@@ -10,15 +10,31 @@
             prefWidth="1000.0" prefHeight="600.0">
 
     <top>
-        <ToolBar>
-            <Button fx:id="btnDodaj" text="Dodaj" />
-            <Button fx:id="btnUredi" text="Uredi" />
-            <Button fx:id="btnObrisi" text="Obriši" />
-            <Separator orientation="VERTICAL"/>
-            <Label text="Ukupno igara:" />
-            <Label fx:id="lblUkupno" text="0" />
-            <Button fx:id="btnPokreni" text="Pokreni igru" visible="false" onAction="#pokreniIgru" />
-        </ToolBar>
+        <VBox spacing="5">
+            <ToolBar>
+                <Button fx:id="btnDodaj" text="Dodaj" />
+                <Button fx:id="btnUredi" text="Uredi" />
+                <Button fx:id="btnObrisi" text="Obriši" />
+                <Separator orientation="VERTICAL"/>
+                <Label text="Ukupno igara:" />
+                <Label fx:id="lblUkupno" text="0" />
+                <Button fx:id="btnPokreni" text="Pokreni igru" visible="false" onAction="#pokreniIgru" />
+            </ToolBar>
+
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 5 10 5 10;">
+                <Label text="Pretraga:" />
+                <TextField fx:id="txtPretraga" promptText="Unesi naslov" prefWidth="200" />
+
+                <Label text="Platforma:" />
+                <ComboBox fx:id="cmbPlatforma" prefWidth="150" />
+
+                <Label text="Godina:" />
+                <ComboBox fx:id="cmbGodina" prefWidth="150" />
+
+                <Button fx:id="btnFiltriraj" text="Primijeni filtere" />
+                <Button fx:id="btnResetiraj" text="Resetiraj" />
+            </HBox>
+        </VBox>
     </top>
 
     <center>

@@ -18,13 +18,22 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class MainController {
     private ObservableList<Igra> listaIgara = FXCollections.observableArrayList();
+    private ObservableList<Igra> filtriranaListaIgara = FXCollections.observableArrayList();
 
     @FXML
     private Button btnDodaj;
@@ -37,6 +46,21 @@ public class MainController {
 
     @FXML
     private Button btnPokreni;
+
+    @FXML
+    private Button btnFiltriraj;
+
+    @FXML
+    private Button btnResetiraj;
+
+    @FXML
+    private TextField txtPretraga;
+
+    @FXML
+    private ComboBox<String> cmbPlatforma;
+
+    @FXML
+    private ComboBox<String> cmbGodina;
 
     @FXML
     private TableColumn<Igra, String> colNaslov;
@@ -67,6 +91,9 @@ public class MainController {
         ucitajPodatke();
         tableViewIgre.setItems(listaIgara);
 
+        // Inicijalizacija combo boxova
+        inicijalizirajFiltere();
+
         azurirajBrojIgara();
 
         // Postavljanje event handlera za gumbe
@@ -83,6 +110,48 @@ public class MainController {
                 btnPokreni.setVisible(false);
             }
         });
+
+        // Dodaj listener za real-time pretragu kada se promijeni tekst u txtPretraga
+        txtPretraga.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                filtrirajIgre();
+            }
+        });
+    }
+
+    // Metoda za inicijalizaciju filter komponenti
+    private void inicijalizirajFiltere() {
+        // Inicijalizacija nakon što se učitaju podaci
+        Platform.runLater(() -> {
+            // Dohvati sve jedinstvene platforme
+            Set<String> platforme = listaIgara.stream()
+                    .map(Igra::getPlatforma)
+                    .collect(Collectors.toSet());
+
+            // Dohvati sve jedinstvene godine iz datuma izlaska
+            Set<String> godine = listaIgara.stream()
+                    .map(igra -> igra.getDatumIzlaska().split("-")[0])
+                    .collect(Collectors.toSet());
+
+            // Dodaj "Sve platforme" na početak liste platformi
+            List<String> listaPlatformi = new ArrayList<>(platforme);
+            listaPlatformi.sort(String::compareTo);
+            listaPlatformi.add(0, "Sve platforme");
+
+            // Dodaj "Sve godine" na početak liste godina i sortiraj
+            List<String> listaGodina = new ArrayList<>(godine);
+            listaGodina.sort(String::compareTo);
+            listaGodina.add(0, "Sve godine");
+            listaGodina.add("Najstarije prvo");
+            listaGodina.add("Najnovije prvo");
+
+            // Postavi podatke u ComboBoxove
+            cmbPlatforma.setItems(FXCollections.observableArrayList(listaPlatformi));
+            cmbPlatforma.setValue("Sve platforme");
+
+            cmbGodina.setItems(FXCollections.observableArrayList(listaGodina));
+            cmbGodina.setValue("Sve godine");
+        });
     }
 
     private void postaviEventHandlere() {
@@ -90,6 +159,8 @@ public class MainController {
         btnUredi.setOnAction(event -> urediIgru());
         btnObrisi.setOnAction(event -> obrisiIgru());
         btnPokreni.setOnAction(event -> pokreniIgru());
+        btnFiltriraj.setOnAction(event -> filtrirajIgre());
+        btnResetiraj.setOnAction(event -> resetirajFilter());
     }
 
     private void otvoriDodajIgruProzor() {
@@ -328,5 +399,68 @@ public class MainController {
             gameControlStage.initOwner(btnPokreni.getScene().getWindow());
             gameControlStage.show();
         }
+    }
+
+    private void filtrirajIgre() {
+        String pretragaTekst = txtPretraga.getText().toLowerCase();
+        String odabranaPlatforma = cmbPlatforma.getValue();
+        String odabranaGodina = cmbGodina.getValue();
+
+        // Korištenje Stream API-ja i lambda izraza za filtriranje igara
+        ObservableList<Igra> rezultat = listaIgara.stream()
+            .filter(igra -> {
+                // Filtriranje po naslovu ako je unesen tekst za pretragu
+                if (pretragaTekst != null && !pretragaTekst.isEmpty()) {
+                    return igra.getNaslovIgre().toLowerCase().contains(pretragaTekst);
+                }
+                return true;
+            })
+            .filter(igra -> {
+                // Filtriranje po platformi ako je odabrana specifična platforma
+                if (odabranaPlatforma != null && !odabranaPlatforma.equals("Sve platforme")) {
+                    return igra.getPlatforma().equals(odabranaPlatforma);
+                }
+                return true;
+            })
+            .filter(igra -> {
+                // Filtriranje po godini ako je odabrana specifična godina
+                if (odabranaGodina != null) {
+                    if (odabranaGodina.equals("Najstarije prvo")) {
+                        return true; // Ne filtriramo, samo ćemo sortirati kasnije
+                    } else if (odabranaGodina.equals("Najnovije prvo")) {
+                        return true; // Ne filtriramo, samo ćemo sortirati kasnije
+                    } else if (!odabranaGodina.equals("Sve godine")) {
+                        // Izdvajanje godine iz datuma (format: "yyyy-MM-dd")
+                        String godinaIzlaska = igra.getDatumIzlaska().split("-")[0];
+                        return godinaIzlaska.equals(odabranaGodina);
+                    }
+                }
+                return true;
+            })
+            .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+        // Sortiranje rezultata ako je odabrana opcija za sortiranje
+        if (odabranaGodina != null) {
+            if (odabranaGodina.equals("Najstarije prvo")) {
+                rezultat.sort(Comparator.comparing(igra -> igra.getDatumIzlaska()));
+            } else if (odabranaGodina.equals("Najnovije prvo")) {
+                rezultat.sort((igra1, igra2) -> igra2.getDatumIzlaska().compareTo(igra1.getDatumIzlaska()));
+            }
+        }
+
+        // Postavljanje filtriranih rezultata u tablicu
+        tableViewIgre.setItems(rezultat);
+
+        // Ažuriranje prikaza broja igara
+        lblUkupno.setText(String.valueOf(rezultat.size()));
+    }
+
+    private void resetirajFilter() {
+        txtPretraga.clear();
+        cmbPlatforma.setValue("Sve platforme");
+        cmbGodina.setValue("Sve godine");
+
+        tableViewIgre.setItems(listaIgara);
+        azurirajBrojIgara();
     }
 }
