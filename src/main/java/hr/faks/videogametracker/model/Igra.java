@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public abstract class Igra implements Igrivo {
+    private Integer id; // ID iz baze podataka (null ako nije spremljena u bazu)
     private String naslovIgre;
     private String platforma;
     private String zanrIgre;
@@ -14,6 +15,7 @@ public abstract class Igra implements Igrivo {
     /* ------------------------------ KONSTRUKTORI ------------------------------ */
 
     public Igra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean digitalnaIgra, boolean instalirana) {
+        this.id = null; // Novo kreirana igra nema ID
         this.naslovIgre = naslovIgre;
         this.platforma = platforma;
         this.zanrIgre = zanrIgre;
@@ -23,6 +25,10 @@ public abstract class Igra implements Igrivo {
     }
 
     /* ------------------------------ SETTERI ------------------------------ */
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public void setNaslovIgre(String naslovIgre) {
         this.naslovIgre = naslovIgre;
@@ -45,6 +51,10 @@ public abstract class Igra implements Igrivo {
     }
 
     /* ------------------------------ GETTERI ------------------------------ */
+
+    public Integer getId() {
+        return id;
+    }
 
     public String getNaslovIgre() {
         return naslovIgre;

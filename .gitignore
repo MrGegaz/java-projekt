@@ -3,6 +3,18 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### DB credentials (lokalna konfiguracija) ###
+database.properties
+
+# Logovi i eksportirane datoteke
+logs/
+*.log
+
+# Exporti i podaci
+igre.json
+exports/
+*.txt
+
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml

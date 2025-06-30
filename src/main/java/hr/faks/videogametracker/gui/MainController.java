@@ -3,6 +3,7 @@ package hr.faks.videogametracker.gui;
 import hr.faks.videogametracker.model.Igra;
 import hr.faks.videogametracker.model.KonzolnaIgra;
 import hr.faks.videogametracker.model.PcIgra;
+import hr.faks.videogametracker.util.DatabaseManager;
 import hr.faks.videogametracker.util.FileManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 public class MainController {
     private ObservableList<Igra> listaIgara = FXCollections.observableArrayList();
     private ObservableList<Igra> filtriranaListaIgara = FXCollections.observableArrayList();
+    private boolean koristiBazu = false; // Prati koristimo li bazu ili JSON datoteku
+    private DatabaseManager dbManager;
 
     @FXML
     private Button btnDodaj;
@@ -213,9 +216,25 @@ public class MainController {
     private void obrisiIgru() {
         Igra odabranaIgra = tableViewIgre.getSelectionModel().getSelectedItem();
         if (odabranaIgra != null) {
+            // Obriši iz baze podataka ako je to aktivni izvor podataka
+            if (koristiBazu && odabranaIgra.getId() != null) {
+                try {
+                    if (dbManager != null && dbManager.isConnected()) {
+                        dbManager.deleteGame(odabranaIgra.getId());
+                    }
+                } catch (Exception e) {
+                    System.err.println("Greška pri brisanju iz baze: " + e.getMessage());
+                }
+            }
+
+            // Obriši iz memorije
             listaIgara.remove(odabranaIgra);
             azurirajBrojIgara();
-            spremiPodatke();
+
+            // Spremi promjene (samo ako koristimo JSON)
+            if (!koristiBazu) {
+                spremiPodatke();
+            }
         }
     }
 
@@ -234,30 +253,64 @@ public class MainController {
         lblUkupno.setText(String.valueOf(listaIgara.size()));
     }
 
-    // Metoda za učitavanje podataka iz JSON datoteke
+    // Metoda za učitavanje podataka - prvo pokuša iz baze, a onda iz JSON datoteke
     private void ucitajPodatke() {
         // Učitavanje podataka u novom threadu
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                if (FileManager.postojeDatoteka()) {
+                // Prvo pokušaj učitati podatke iz baze podataka
+                dbManager = DatabaseManager.getInstance();
+                if (dbManager.connect()) {
                     try {
-                        listaIgara = FileManager.ucitajIgre();
-                        System.out.println("Podaci učitani iz JSON datoteke.");
-                    } catch (IOException e) {
-                        System.err.println("Greška pri učitavanju podataka: " + e.getMessage());
-                        e.printStackTrace();
-                        obrisiIPonovoKreirajDatoteku();
+                        // Inicijaliziraj tablice u bazi ako ne postoje
+                        dbManager.initializeDatabase();
+
+                        // Učitaj podatke iz baze
+                        ObservableList<Igra> igreIzBaze = dbManager.loadGames();
+                        if (igreIzBaze != null && !igreIzBaze.isEmpty()) {
+                            listaIgara = igreIzBaze;
+                            koristiBazu = true;
+                            System.out.println("Podaci uspješno učitani iz baze podataka.");
+                            return null;
+                        } else {
+                            System.out.println("Nema podataka u bazi. Pokušat ću učitati iz JSON datoteke.");
+                            dbManager.disconnect();
+                            koristiBazu = false;
+                        }
                     } catch (Exception e) {
-                        System.err.println("Greška pri parsiranju JSON datoteke: " + e.getMessage());
-                        System.out.println("Učitavam testne podatke umjesto neispravne JSON datoteke.");
-                        obrisiIPonovoKreirajDatoteku();
+                        System.err.println("Problem s bazom podataka: " + e.getMessage());
+                        e.printStackTrace();
+                        // Prekini vezu s bazom ako je uspostavljena
+                        dbManager.disconnect();
+                        koristiBazu = false;
                     }
                 } else {
-                    System.out.println("JSON datoteka ne postoji. Učitavam testne podatke.");
-                    ucitajTestnePodatke();
-                    // Nakon prvog pokretanja, spremi testne podatke
-                    spremiPodatke();
+                    System.out.println("Nije moguće povezati se s bazom. Učitavam podatke iz JSON datoteke.");
+                    koristiBazu = false;
+                }
+
+                // Ako nismo uspjeli učitati iz baze, idemo koristiti JSON datoteku
+                if (!koristiBazu) {
+                    if (FileManager.postojeDatoteka()) {
+                        try {
+                            listaIgara = FileManager.ucitajIgre();
+                            System.out.println("Podaci učitani iz JSON datoteke.");
+                        } catch (IOException e) {
+                            System.err.println("Greška pri učitavanju podataka iz JSON datoteke: " + e.getMessage());
+                            e.printStackTrace();
+                            obrisiIPonovoKreirajDatoteku();
+                        } catch (Exception e) {
+                            System.err.println("Greška pri parsiranju JSON datoteke: " + e.getMessage());
+                            System.out.println("Učitavam testne podatke umjesto neispravne JSON datoteke.");
+                            obrisiIPonovoKreirajDatoteku();
+                        }
+                    } else {
+                        System.out.println("JSON datoteka ne postoji. Učitavam testne podatke.");
+                        ucitajTestnePodatke();
+                        // Nakon prvog pokretanja, spremi testne podatke
+                        spremiPodatke();
+                    }
                 }
 
                 if (listaIgara == null) {
@@ -272,6 +325,13 @@ public class MainController {
                 super.succeeded();
                 tableViewIgre.setItems(listaIgara);
                 azurirajBrojIgara();
+
+                // Dodaj statusnu poruku o tome odakle su podaci učitani
+                if (koristiBazu) {
+                    System.out.println("STATUS: Koristi se baza podataka");
+                } else {
+                    System.out.println("STATUS: Koristi se JSON datoteka");
+                }
             }
 
             @Override
@@ -347,14 +407,42 @@ public class MainController {
         }
     }
 
-    // Metoda za spremanje podataka u JSON datoteku
+    // Metoda za spremanje podataka ovisno o izvoru podataka (baza ili JSON)
     private void spremiPodatke() {
-        try {
-            FileManager.spremiIgreDirektno(listaIgara);
-            System.out.println("Podaci uspješno spremljeni.");
-        } catch (IOException e) {
-            System.err.println("Greška pri spremanju podataka: " + e.getMessage());
-            e.printStackTrace();
+        if (koristiBazu) {
+            try {
+                // Spremanje u bazu podataka - koristi pametnu metodu koja razlikuje INSERT i UPDATE
+                if (dbManager != null && dbManager.isConnected()) {
+                    for (Igra igra : listaIgara) {
+                        dbManager.saveOrUpdateGame(igra); // Koristi novu metodu
+                    }
+                    System.out.println("Podaci uspješno spremljeni u bazu podataka.");
+                } else {
+                    // Ako je došlo do problema s bazom, prebaci se na JSON
+                    System.out.println("Nije moguće spremiti u bazu. Spremam u JSON datoteku.");
+                    FileManager.spremiIgreDirektno(listaIgara);
+                    koristiBazu = false;
+                }
+            } catch (Exception e) {
+                System.err.println("Greška pri spremanju u bazu: " + e.getMessage());
+                // Ako spremanje u bazu ne uspije, pokušaj spremiti u JSON
+                try {
+                    FileManager.spremiIgreDirektno(listaIgara);
+                    System.out.println("Podaci spremljeni u JSON datoteku kao rezervna opcija.");
+                    koristiBazu = false;
+                } catch (IOException ioe) {
+                    System.err.println("Nije moguće spremiti ni u JSON: " + ioe.getMessage());
+                }
+            }
+        } else {
+            // Spremanje u JSON datoteku
+            try {
+                FileManager.spremiIgreDirektno(listaIgara);
+                System.out.println("Podaci uspješno spremljeni u JSON datoteku.");
+            } catch (IOException e) {
+                System.err.println("Greška pri spremanju podataka u JSON: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

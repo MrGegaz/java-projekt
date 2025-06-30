@@ -5,6 +5,7 @@ module hr.faks.videogametracker {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.google.gson;
+    requires java.sql;
 
     opens hr.faks.videogametracker.gui to javafx.fxml;
     opens hr.faks.videogametracker.app to javafx.graphics;
