@@ -115,7 +115,6 @@ public class DodajIgruController {
                 }
             }
 
-            // Zatvori prozor
             zatvoriProzor();
         } else {
             // Prikaži upozorenje ako nisu sva polja popunjena

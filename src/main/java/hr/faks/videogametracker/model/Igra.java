@@ -91,18 +91,8 @@ public abstract class Igra implements Igrivo {
     }
 
     @Override
-    public void pokreniIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Igra " + naslovIgre + " je pokrenuta", ButtonType.OK);
-        alert.setTitle("Pokretanje igre");
-        alert.showAndWait();
-    }
+    public void pokreniIgru() {}
 
     @Override
-    public void zaustaviIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Igra " + naslovIgre + " je zaustavljena", ButtonType.OK);
-        alert.setTitle("Zaustavljanje igre");
-        alert.showAndWait();
-    }
-
-    // TODO: Dodati još neke metode ako je potrebno
+    public void zaustaviIgru() {}
 }

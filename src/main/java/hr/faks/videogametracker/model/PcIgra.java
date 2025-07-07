@@ -1,5 +1,8 @@
 package hr.faks.videogametracker.model;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 public class PcIgra extends Igra implements Igrivo {
     private String zahtjevi;
     private boolean imaDRM; // Ima li zaštitu poput Denuvo ili Steam itd.
@@ -35,8 +38,6 @@ public class PcIgra extends Igra implements Igrivo {
 
     /* ------------------------------ METODE ------------------------------ */
 
-    // TODO: Dodati ostale potrebne metode
-
     public String toString() {
         return "PC Igra {\n" +
                 super.toString() +
@@ -47,11 +48,15 @@ public class PcIgra extends Igra implements Igrivo {
 
     @Override
     public void pokreniIgru() {
-        // TODO: Implementirati logiku pokretanja igre na PC-u
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "PC igra " + getNaslovIgre() + " je pokrenuta", ButtonType.OK);
+        alert.setTitle("Pokretanje PC igre");
+        alert.showAndWait();
     }
 
     @Override
     public void zaustaviIgru() {
-        // TODO: Implementirati logiku zaustavljanja igre na PC-u
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "PC igra " + getNaslovIgre() + " je zaustavljena", ButtonType.OK);
+        alert.setTitle("Zaustavljanje PC igre");
+        alert.showAndWait();
     }
 }

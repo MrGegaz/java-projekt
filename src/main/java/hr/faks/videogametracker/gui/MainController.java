@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Comparator;
@@ -124,7 +123,6 @@ public class MainController {
 
     // Metoda za inicijalizaciju filter komponenti
     private void inicijalizirajFiltere() {
-        // Inicijalizacija nakon što se učitaju podaci
         Platform.runLater(() -> {
             // Dohvati sve jedinstvene platforme
             Set<String> platforme = listaIgara.stream()
@@ -255,7 +253,6 @@ public class MainController {
 
     // Metoda za učitavanje podataka - prvo pokuša iz baze, a onda iz JSON datoteke
     private void ucitajPodatke() {
-        // Učitavanje podataka u novom threadu
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -342,7 +339,6 @@ public class MainController {
             }
         };
 
-        // Pokretanje task-a u novom threadu
         new Thread(task).start();
     }
 
@@ -371,13 +367,6 @@ public class MainController {
                     System.out.println("Neispravna datoteka uspješno obrisana.");
                 } else {
                     System.err.println("Nije moguće obrisati neispravnu datoteku! Pokušavam alternativnu metodu...");
-                    // Alternativna metoda brisanja
-                    try {
-                        java.nio.file.Files.delete(datoteka.toPath());
-                        System.out.println("Neispravna datoteka obrisana alternativnom metodom.");
-                    } catch (Exception ex) {
-                        System.err.println("Ni alternativna metoda brisanja nije uspjela: " + ex.getMessage());
-                    }
                 }
             } else {
                 System.out.println("Datoteka ne postoji, ništa za brisati.");
@@ -411,10 +400,9 @@ public class MainController {
     private void spremiPodatke() {
         if (koristiBazu) {
             try {
-                // Spremanje u bazu podataka - koristi pametnu metodu koja razlikuje INSERT i UPDATE
                 if (dbManager != null && dbManager.isConnected()) {
                     for (Igra igra : listaIgara) {
-                        dbManager.saveOrUpdateGame(igra); // Koristi novu metodu
+                        dbManager.saveOrUpdateGame(igra);
                     }
                     System.out.println("Podaci uspješno spremljeni u bazu podataka.");
                 } else {
@@ -514,9 +502,9 @@ public class MainController {
                 // Filtriranje po godini ako je odabrana specifična godina
                 if (odabranaGodina != null) {
                     if (odabranaGodina.equals("Najstarije prvo")) {
-                        return true; // Ne filtriramo, samo ćemo sortirati kasnije
+                        return true;
                     } else if (odabranaGodina.equals("Najnovije prvo")) {
-                        return true; // Ne filtriramo, samo ćemo sortirati kasnije
+                        return true;
                     } else if (!odabranaGodina.equals("Sve godine")) {
                         // Izdvajanje godine iz datuma (format: "yyyy-MM-dd")
                         String godinaIzlaska = igra.getDatumIzlaska().split("-")[0];
@@ -536,10 +524,8 @@ public class MainController {
             }
         }
 
-        // Postavljanje filtriranih rezultata u tablicu
         tableViewIgre.setItems(rezultat);
 
-        // Ažuriranje prikaza broja igara
         lblUkupno.setText(String.valueOf(rezultat.size()));
     }
 

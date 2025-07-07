@@ -207,7 +207,6 @@ public class DatabaseManager {
             }
         }
     }
-
     /**
      * Save or update a game in the database
      * Uses INSERT for new games (id == null) and UPDATE for existing games
