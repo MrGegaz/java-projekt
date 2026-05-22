@@ -16,7 +16,7 @@ import java.util.Properties;
  * Uses properties file for secure credential storage
  */
 public class DatabaseManager {
-    private static final String PROPERTIES_FILE = "/database.properties";
+    private static final String PROPERTIES_FILE = "database.properties";
     private static String dbUrl;
     private static String dbUser;
     private static String dbPassword;
@@ -40,7 +40,7 @@ public class DatabaseManager {
     private static void loadDatabaseProperties() {
         Properties props = new Properties();
 
-        try (InputStream input = DatabaseManager.class.getResourceAsStream(PROPERTIES_FILE)) {
+        try (InputStream input = DatabaseManager.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
             if (input == null) {
                 System.err.println("Sorry, unable to find " + PROPERTIES_FILE);
                 return;
@@ -521,7 +521,7 @@ public class DatabaseManager {
                 stmt.execute(createIgreTable);
                 stmt.execute(createPcTable);
                 stmt.execute(createKonzoleTable);
-                System.out.println("Database tables initialized successfully");
+                System.out.println("Database tables check completed (IF NOT EXISTS)");
                 return true;
             }
 
