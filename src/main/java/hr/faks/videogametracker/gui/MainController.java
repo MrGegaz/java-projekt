@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 public class MainController {
     private ObservableList<Igra> listaIgara = FXCollections.observableArrayList();
-    private ObservableList<Igra> filtriranaListaIgara = FXCollections.observableArrayList();
     private boolean koristiBazu = false; // Prati koristimo li bazu ili JSON datoteku
     private DatabaseManager dbManager;
 
