@@ -1,17 +1,9 @@
 package hr.faks.videogametracker.app;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-
-import hr.faks.videogametracker.model.Igra;
-import hr.faks.videogametracker.model.KonzolnaIgra;
-import hr.faks.videogametracker.model.PcIgra;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
 

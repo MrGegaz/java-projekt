@@ -1,8 +1,5 @@
 package hr.faks.videogametracker.model;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
 public abstract class Igra implements Igrivo {
     private Integer id; // ID iz baze podataka (null ako nije spremljena u bazu)
     private String naslovIgre;
