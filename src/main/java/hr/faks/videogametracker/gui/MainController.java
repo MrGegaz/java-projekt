@@ -407,14 +407,14 @@ public class MainController {
                 } else {
                     // Ako je došlo do problema s bazom, prebaci se na JSON
                     System.out.println("Nije moguće spremiti u bazu. Spremam u JSON datoteku.");
-                    FileManager.spremiIgreDirektno(listaIgara);
+                    FileManager.spremiIgre(listaIgara);
                     koristiBazu = false;
                 }
             } catch (Exception e) {
                 System.err.println("Greška pri spremanju u bazu: " + e.getMessage());
                 // Ako spremanje u bazu ne uspije, pokušaj spremiti u JSON
                 try {
-                    FileManager.spremiIgreDirektno(listaIgara);
+                    FileManager.spremiIgre(listaIgara);
                     System.out.println("Podaci spremljeni u JSON datoteku kao rezervna opcija.");
                     koristiBazu = false;
                 } catch (IOException ioe) {
@@ -424,7 +424,7 @@ public class MainController {
         } else {
             // Spremanje u JSON datoteku
             try {
-                FileManager.spremiIgreDirektno(listaIgara);
+                FileManager.spremiIgre(listaIgara);
                 System.out.println("Podaci uspješno spremljeni u JSON datoteku.");
             } catch (IOException e) {
                 System.err.println("Greška pri spremanju podataka u JSON: " + e.getMessage());
@@ -437,8 +437,8 @@ public class MainController {
     private void ucitajTestnePodatke() {
         listaIgara = FXCollections.observableArrayList();
 
-        listaIgara.add(new PcIgra("Cyberpunk 2077", "PC", "RPG", "2020-12-10", true, true, true, "specifikacija", true));
-        listaIgara.add(new PcIgra("The Witcher 3", "PC", "RPG", "2015-05-19", true, true, true, "specifikacija", false));
+        listaIgara.add(new PcIgra("Cyberpunk 2077", "PC", "RPG", "2020-12-10", true, true, "specifikacija", true));
+        listaIgara.add(new PcIgra("The Witcher 3", "PC", "RPG", "2015-05-19", true, true, "specifikacija", false));
         listaIgara.add(new KonzolnaIgra("God of War", "Playstation", "Action", "2018-04-20", true, false, "PS4"));
         listaIgara.add(new KonzolnaIgra("Halo Infinite", "Xbox", "Shooter", "2021-12-08", true, false, "Xbox Series X"));
     }

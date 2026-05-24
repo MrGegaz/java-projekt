@@ -60,64 +60,6 @@ public class FileManager {
         }
     }
 
-    // Sprema listu igara u JSON datoteku koristeći direktno formatiranje
-    public static void spremiIgreDirektno(ObservableList<Igra> igre) throws IOException {
-        // Direktorij postoji?
-        Path direktorij = Paths.get(DATA_FOLDER);
-        if (!Files.exists(direktorij)) {
-            Files.createDirectories(direktorij);
-        }
-
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            // Početak JSON polja
-            writer.write("[\n");
-
-            int size = igre.size();
-            for (int i = 0; i < size; i++) {
-                Igra igra = igre.get(i);
-
-                writer.write("  {\n");
-
-                // Dodajemo polje "tip" koje je ključno za deserijalizaciju
-                if (igra instanceof PcIgra) {
-                    writer.write("    \"tip\": \"PC\",\n");
-                } else if (igra instanceof KonzolnaIgra) {
-                    writer.write("    \"tip\": \"KONZOLNA\",\n");
-                }
-
-                // Zajednička svojstva
-                writer.write("    \"naslovIgre\": \"" + igra.getNaslovIgre() + "\",\n");
-                writer.write("    \"platforma\": \"" + igra.getPlatforma() + "\",\n");
-                writer.write("    \"zanrIgre\": \"" + igra.getZanrIgre() + "\",\n");
-                writer.write("    \"datumIzlaska\": \"" + igra.getDatumIzlaska() + "\",\n");
-                writer.write("    \"digitalnaIgra\": " + igra.isDigitalnaIgra() + ",\n");
-                writer.write("    \"instalirana\": " + igra.isInstalirana() + ",\n");
-
-                // Specifična svojstva
-                if (igra instanceof PcIgra) {
-                    PcIgra pcIgra = (PcIgra) igra;
-                    writer.write("    \"zahtjevi\": \"" + pcIgra.getZahtjevi() + "\",\n");
-                    writer.write("    \"imaDRM\": " + pcIgra.isImaDRM() + "\n");
-                } else if (igra instanceof KonzolnaIgra) {
-                    KonzolnaIgra konzolnaIgra = (KonzolnaIgra) igra;
-                    writer.write("    \"platformaKonzole\": \"" + konzolnaIgra.getPlatformaKonzole() + "\"\n");
-                }
-
-                // Zatvori objekt sa zarezom ako nije posljednji
-                if (i < size - 1) {
-                    writer.write("  },\n");
-                } else {
-                    writer.write("  }\n");
-                }
-            }
-
-            // Kraj JSON polja
-            writer.write("]");
-
-            System.out.println("Igre uspješno spremljene direktnom metodom u " + FILE_PATH);
-        }
-    }
-
     /*
     * Učitavanje liste igara iz JSON datoteke
     * @return ObservableList s učitanim igrama ili praznu listu ako datoteka ne postoji
@@ -207,8 +149,8 @@ public class FileManager {
             if (PC_IGRA.equals(tip)) {
                 String zahtjevi = jsonObject.has("zahtjevi") ? jsonObject.get("zahtjevi").getAsString() : "Nepoznat zahtjev";
                 boolean imaDRM = jsonObject.has("imaDRM") && jsonObject.get("imaDRM").getAsBoolean();
-                return new PcIgra(naslovIgre, platforma, zanrIgre, datumIzlaska, false,
-                                 digitalnaIgra, instalirana, zahtjevi, imaDRM);
+                return new PcIgra(naslovIgre, platforma, zanrIgre, datumIzlaska,
+                        digitalnaIgra, instalirana, zahtjevi, imaDRM);
             } else if (KONZOLNA_IGRA.equals(tip)) {
                 String platformaKonzole = jsonObject.has("platformaKonzole") ? jsonObject.get("platformaKonzole").getAsString() : "Nepoznata konzola";
                 return new KonzolnaIgra(naslovIgre, platforma, zanrIgre, datumIzlaska,

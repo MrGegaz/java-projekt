@@ -101,7 +101,7 @@ public class DodajIgruController {
                 Igra novaIgra;
 
                 if (platforma.equalsIgnoreCase("PC")) {
-                    novaIgra = new PcIgra(naslov, platforma, zanr, formatiranDatum, true, true, true, "Standardne specifikacije", false);
+                    novaIgra = new PcIgra(naslov, platforma, zanr, formatiranDatum, true, true, "Standardne specifikacije", false);
                 } else {
                     novaIgra = new KonzolnaIgra(naslov, platforma, zanr, formatiranDatum, true, false, platforma);
                 }

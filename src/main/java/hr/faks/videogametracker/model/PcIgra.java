@@ -9,7 +9,7 @@ public class PcIgra extends Igra implements Igrivo {
 
     /* ------------------------------ KONSTRUKTORI ------------------------------ */
 
-    public PcIgra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska, boolean kupljena,
+    public PcIgra(String naslovIgre, String platforma, String zanrIgre, String datumIzlaska,
                   boolean digitalnaIgra, boolean instalirana, String zahtjevi, boolean imaDRM) {
         super(naslovIgre, platforma, zanrIgre, datumIzlaska, digitalnaIgra, instalirana);
         this.zahtjevi = zahtjevi;

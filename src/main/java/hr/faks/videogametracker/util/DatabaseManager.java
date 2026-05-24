@@ -256,7 +256,6 @@ public class DatabaseManager {
                             rs.getString("platforma"),
                             rs.getString("zanr"),
                             rs.getString("datum_izlaska"),
-                            true, // kupljena
                             rs.getBoolean("digitalna_kopija"),
                             rs.getBoolean("instalirana"),
                             rs.getString("zahtjevi"),

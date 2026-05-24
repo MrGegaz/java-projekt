@@ -43,6 +43,8 @@ public abstract class Igra implements Igrivo {
         this.datumIzlaska = datumIzlaska;
     }
 
+    public void setDigitalnaIgra(boolean digitalnaIgra) { this.digitalnaIgra = digitalnaIgra; }
+
     public void setInstalirana(boolean instalirana) {
         this.instalirana = instalirana;
     }
