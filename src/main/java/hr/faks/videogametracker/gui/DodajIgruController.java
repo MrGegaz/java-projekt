@@ -63,6 +63,7 @@ public class DodajIgruController {
             tfNaslov.setText(igra.getNaslovIgre());
             tfZanr.setText(igra.getZanrIgre());
             cbPlatforma.setValue(igra.getPlatforma());
+            cbPlatforma.setDisable(true);
 
             // Postavljanje datuma
             try {
