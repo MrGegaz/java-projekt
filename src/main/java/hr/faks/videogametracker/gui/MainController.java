@@ -212,8 +212,8 @@ public class MainController {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         if (odabranaIgra != null) {
             alert.setTitle("Obriši igru");
-            alert.setHeaderText("Brisanje: " + odabranaIgra.getNaslovIgre());
-            alert.setContentText("Sigurno želite obrisati ovu igru?");
+            alert.setHeaderText("Igra: " + odabranaIgra.getNaslovIgre());
+            alert.setContentText("Ovaj postupak se ne može poništiti naknadno!\n\nSigurno želite obrisati ovu igru?");
 
             Optional<ButtonType> result = alert.showAndWait();
 
