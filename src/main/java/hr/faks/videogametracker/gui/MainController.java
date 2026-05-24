@@ -6,29 +6,21 @@ import hr.faks.videogametracker.model.PcIgra;
 import hr.faks.videogametracker.util.DatabaseManager;
 import hr.faks.videogametracker.util.FileManager;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Comparator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -76,6 +68,9 @@ public class MainController {
     private TableColumn<Igra, String> colGodina;
 
     @FXML
+    private TableColumn<Igra, String> colInstalirana;
+
+    @FXML
     private Label lblUkupno;
 
     @FXML
@@ -87,6 +82,8 @@ public class MainController {
         colPlatforma.setCellValueFactory(new PropertyValueFactory<>("platforma"));
         colZanr.setCellValueFactory(new PropertyValueFactory<>("zanrIgre"));
         colGodina.setCellValueFactory(new PropertyValueFactory<>("datumIzlaska"));
+        colInstalirana.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().isInstalirana() ? "Da" : "Ne"));
 
         // Punjenje tablice podacima
         ucitajPodatke();
@@ -212,25 +209,34 @@ public class MainController {
 
     private void obrisiIgru() {
         Igra odabranaIgra = tableViewIgre.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
         if (odabranaIgra != null) {
-            // Obriši iz baze podataka ako je to aktivni izvor podataka
-            if (koristiBazu && odabranaIgra.getId() != null) {
-                try {
-                    if (dbManager != null && dbManager.isConnected()) {
-                        dbManager.deleteGame(odabranaIgra.getId());
+            alert.setTitle("Obriši igru");
+            alert.setHeaderText("Brisanje: " + odabranaIgra.getNaslovIgre());
+            alert.setContentText("Sigurno želite obrisati ovu igru?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                // Obriši iz baze podataka ako je to aktivni izvor podataka
+                if (koristiBazu && odabranaIgra.getId() != null) {
+                    try {
+                        if (dbManager != null && dbManager.isConnected()) {
+                            dbManager.deleteGame(odabranaIgra.getId());
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Greška pri brisanju iz baze: " + e.getMessage());
                     }
-                } catch (Exception e) {
-                    System.err.println("Greška pri brisanju iz baze: " + e.getMessage());
                 }
-            }
 
-            // Obriši iz memorije
-            listaIgara.remove(odabranaIgra);
-            azurirajBrojIgara();
+                // Obriši iz memorije
+                listaIgara.remove(odabranaIgra);
+                azurirajBrojIgara();
 
-            // Spremi promjene (samo ako koristimo JSON)
-            if (!koristiBazu) {
-                spremiPodatke();
+                // Spremi promjene (samo ako koristimo JSON)
+                if (!koristiBazu) {
+                    spremiPodatke();
+                }
             }
         }
     }

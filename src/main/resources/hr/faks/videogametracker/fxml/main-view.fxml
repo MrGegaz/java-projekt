@@ -49,6 +49,7 @@
                     <TableColumn fx:id="colPlatforma" text="Platforma" prefWidth="200"/>
                     <TableColumn fx:id="colZanr" text="Žanr" prefWidth="200"/>
                     <TableColumn fx:id="colGodina" text="Godina izlaska" prefWidth="150"/>
+                    <TableColumn fx:id="colInstalirana" text="Instalirana" prefWidth="100"/>
                 </columns>
             </TableView>
         </VBox>
