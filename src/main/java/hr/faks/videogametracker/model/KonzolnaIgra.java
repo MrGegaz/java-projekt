@@ -37,17 +37,18 @@ public class KonzolnaIgra extends Igra implements Igrivo {
 
     @Override
     public void pokreniIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Konzolna igra " + getNaslovIgre() + " je pokrenuta", ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Pokretanje konzolne igre");
+        alert.setHeaderText("Pokretanje igre " + getNaslovIgre());
+        alert.setContentText("Igra se pokreće na konzoli: " +  platformaKonzole);
         alert.showAndWait();
     }
 
     @Override
     public void zaustaviIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Konzolna igra " + getNaslovIgre() + " je zaustavljena", ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Zaustavljanje konzolne igre");
+        alert.setHeaderText("Igra " +  getNaslovIgre() + " se zaustavlja");
         alert.showAndWait();
     }
-
-
 }

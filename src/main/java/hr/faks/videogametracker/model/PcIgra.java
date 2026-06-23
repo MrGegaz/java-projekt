@@ -48,15 +48,22 @@ public class PcIgra extends Igra implements Igrivo {
 
     @Override
     public void pokreniIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "PC igra " + getNaslovIgre() + " je pokrenuta", ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Pokretanje PC igre");
+        alert.setHeaderText("PC igra " + getNaslovIgre() + " se pokreće");
+        alert.setContentText(
+            "Sistemski zahtjevi: " + zahtjevi + "\n" +
+            "DRM zaštita: " + (imaDRM ? "Da" : "Ne")
+        );
         alert.showAndWait();
     }
 
     @Override
     public void zaustaviIgru() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "PC igra " + getNaslovIgre() + " je zaustavljena", ButtonType.OK);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Zaustavljanje PC igre");
+        alert.setHeaderText("PC igra " + getNaslovIgre() + " se zaustavlja");
         alert.showAndWait();
     }
 }
