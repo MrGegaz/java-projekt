@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 public class DodajIgruController {
 
     private MainController mainController;
-    private Igra igraZaUredivanje; // Igra koja se uređuje (null ako je nova igra)
+    private Igra igraZaUredivanje;
     private boolean uredivanjeMod = false;
 
     @FXML

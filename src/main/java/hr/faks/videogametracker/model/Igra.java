@@ -1,12 +1,12 @@
 package hr.faks.videogametracker.model;
 
 public abstract class Igra implements Igrivo {
-    private Integer id; // ID iz baze podataka (null ako nije spremljena u bazu)
+    private Integer id;
     private String naslovIgre;
     private String platforma;
     private String zanrIgre;
     private String datumIzlaska;
-    private boolean digitalnaIgra; // Je li igra digitalna ili fizička
+    private boolean digitalnaIgra;
     private boolean instalirana;
 
     /* ------------------------------ KONSTRUKTORI ------------------------------ */

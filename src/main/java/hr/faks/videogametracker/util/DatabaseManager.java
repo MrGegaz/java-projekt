@@ -11,9 +11,8 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
-/**
- * Utility class for managing database operations
- * Uses properties file for secure credential storage
+/*
+ * Pomoćna klasa za upravljanje operacijama baze podataka
  */
 public class DatabaseManager {
     private static final String PROPERTIES_FILE = "database.properties";
@@ -31,11 +30,11 @@ public class DatabaseManager {
     }
 
     private DatabaseManager() {
-        // Private constructor for singleton pattern
+        // Privatni konstruktor za singleton pattern
     }
 
-    /**
-     * Load database connection properties from the properties file
+    /*
+     * Učitavanje postavki konekcije za bazu iz datoteke
      */
     private static void loadDatabaseProperties() {
         Properties props = new Properties();
@@ -46,10 +45,10 @@ public class DatabaseManager {
                 return;
             }
 
-            // Load the properties file
+            // Učitavanje datoteke s postavkama
             props.load(input);
 
-            // Get the database connection properties
+            // Dohvaćanje postavki konekcije za bazu
             dbUrl = props.getProperty("db.url");
             dbUser = props.getProperty("db.user");
             dbPassword = props.getProperty("db.password");
@@ -59,8 +58,8 @@ public class DatabaseManager {
         }
     }
 
-    /**
-     * Get the singleton instance of DatabaseManager
+    /*
+     * Singleton instanca baze DatabaseManager
      */
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
@@ -69,15 +68,15 @@ public class DatabaseManager {
         return instance;
     }
 
-    /**
-     * Check if database is connected
+    /*
+     * Provjera veze sa bazom
      */
     public boolean isConnected() {
         return isConnected;
     }
 
-    /**
-     * Connect to the PostgreSQL database
+    /*
+     * Spajanje na PostgreSQL bazu podataka
      */
     public boolean connect() {
         try {
@@ -101,8 +100,8 @@ public class DatabaseManager {
         }
     }
 
-    /**
-     * Close the database connection
+    /*
+     * Zatvaranje veze sa bazom podataka
      */
     public boolean disconnect() {
         if (connection != null) {
@@ -119,22 +118,20 @@ public class DatabaseManager {
         return false;
     }
 
-    /**
-     * Save or update a game in the database
-     * Uses INSERT for new games (id == null) and UPDATE for existing games
+    /*
+     * Spremanje ili ažuriranje igre u bazi
+     * Koristi INSERT za nove igre (id == null) i UPDATE za postojeće
      */
     public boolean saveOrUpdateGame(Igra igra) {
         if (igra.getId() == null) {
-            // Nova igra - koristi INSERT
             return insertNewGame(igra);
         } else {
-            // Postojeća igra - koristi UPDATE
             return updateGame(igra, igra.getId());
         }
     }
 
-    /**
-     * Insert a new game into the database and set its ID
+    /*
+     * Dodavanje nove igre u bazu i postavljanje ID-a
      */
     private boolean insertNewGame(Igra igra) {
         try {
@@ -144,7 +141,7 @@ public class DatabaseManager {
 
             connection.setAutoCommit(false);
 
-            // First, insert into the main igre table
+            // Prvo insert u tablicu igre
             String sql = "INSERT INTO igre (naslov, platforma, zanr, datum_izlaska, digitalna_kopija, instalirana, tip) " +
                          "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
@@ -157,7 +154,7 @@ public class DatabaseManager {
                 pstmt.setBoolean(5, igra.isDigitalnaIgra());
                 pstmt.setBoolean(6, igra.isInstalirana());
 
-                // Determine game type
+                // Odrediti tip igre
                 if (igra instanceof PcIgra) {
                     pstmt.setString(7, "pc");
                 } else {
@@ -175,7 +172,7 @@ public class DatabaseManager {
                 }
             }
 
-            // Now insert into the specific game type table
+            // Novi isert u tablicu specifičnu za tip igre
             if (igra instanceof PcIgra) {
                 PcIgra pcIgra = (PcIgra) igra;
                 sql = "INSERT INTO pc_igre (igra_id, zahtjevi, drm) VALUES (?, ?, ?)";
@@ -223,8 +220,8 @@ public class DatabaseManager {
         }
     }
 
-    /**
-     * Load all games from the database
+    /*
+     * Učitavanje svih igara iz baze
      */
     public ObservableList<Igra> loadGames() {
         ObservableList<Igra> games = FXCollections.observableArrayList();
@@ -288,8 +285,8 @@ public class DatabaseManager {
         }
     }
 
-    /**
-     * Update an existing game in the database
+    /*
+     * Ažuriranje postojeće igre u bazi
      */
     public boolean updateGame(Igra igra, int id) {
         try {
@@ -299,7 +296,7 @@ public class DatabaseManager {
 
             connection.setAutoCommit(false);
 
-            // First, update the main igre table
+            // Prvo ažurirati tablicu igre
             String sql = "UPDATE igre SET naslov = ?, platforma = ?, zanr = ?, datum_izlaska = ?, " +
                         "digitalna_kopija = ?, instalirana = ? WHERE id = ?";
 
@@ -314,7 +311,7 @@ public class DatabaseManager {
                 pstmt.executeUpdate();
             }
 
-            // Then, update the type-specific table
+            // Zatim ažurirati tablicu specifičnu za tip igre
             if (igra instanceof PcIgra) {
                 PcIgra pcIgra = (PcIgra) igra;
                 sql = "UPDATE pc_igre SET zahtjevi = ?, drm = ? WHERE igra_id = ?";
@@ -363,7 +360,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Delete a game from the database
+     * Brisanje igre iz baze
      */
     public boolean deleteGame(int id) {
         try {
@@ -390,7 +387,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Initialize database tables if they don't exist
+     * Inicijalizacija tablica u bazi ako već ne postoje
      */
     public boolean initializeDatabase() {
         try {
