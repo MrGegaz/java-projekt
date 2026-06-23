@@ -50,13 +50,6 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- Gson for JSON serialization/deserialization -->
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
-    </dependency>
-
     <!-- PostgreSQL JDBC Driver -->
     <dependency>
       <groupId>org.postgresql</groupId>
